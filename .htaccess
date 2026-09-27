@@ -1,0 +1,18 @@
+# Apache: password protection + keep search engines out.
+# Set AuthUserFile to the absolute path of your .htpasswd (ideally OUTSIDE the web root)
+# and create it with:  htpasswd -c /absolute/path/.htpasswd brera
+
+AuthType Basic
+AuthName "Gnocchi sin reglas"
+AuthUserFile /CHANGE/ME/.htpasswd
+Require valid-user
+
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
+</IfModule>
+
+Options -Indexes
+
+<FilesMatch "^\.ht|\.(md|sh|example)$">
+  Require all denied
+</FilesMatch>

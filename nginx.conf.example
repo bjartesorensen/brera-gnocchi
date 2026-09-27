@@ -1,0 +1,11 @@
+# nginx: add inside the server { } block of the bikini site.
+# Create the password file with:  htpasswd -c /etc/nginx/gnocchi.htpasswd brera
+#   (or: printf "brera:$(openssl passwd -apr1)\n" | sudo tee /etc/nginx/gnocchi.htpasswd)
+
+location /gnocchi/ {
+    auth_basic           "Gnocchi sin reglas";
+    auth_basic_user_file /etc/nginx/gnocchi.htpasswd;
+    add_header X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex" always;
+    autoindex off;
+    location ~ /\.|\.(md|example)$ { deny all; }
+}
