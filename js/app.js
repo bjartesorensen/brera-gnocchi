@@ -303,8 +303,11 @@
     }).catch(function () { wakeWanted = false; showWake(false); });
   }
 
-  if ("wakeLock" in navigator) {
-    wakeBtn.hidden = false;
+  if (!("wakeLock" in navigator)) {
+    wakeBtn.addEventListener("click", function () {
+      say("Este navegador no puede mantener la pantalla encendida", "This browser can't keep the screen on");
+    });
+  } else {
     wakeBtn.addEventListener("click", function () {
       if (wakeWanted) {
         wakeWanted = false;
