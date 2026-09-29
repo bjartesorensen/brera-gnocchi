@@ -270,6 +270,61 @@
     updateRecipe(art);
   });
 
+  /* ---------- keep the screen on while cooking (Screen Wake Lock API) ---------- */
+  var wakeBtn = document.getElementById("wake-btn");
+  var wakeLock = null, wakeWanted = false;
+
+  var toast = document.createElement("div");
+  toast.className = "toast";
+  toast.setAttribute("role", "status");
+  document.body.appendChild(toast);
+  var toastTimer;
+  function say(es, en) {
+    toast.innerHTML = '<span class="es" lang="es">' + es + '</span><span class="en" lang="en">' + en + "</span>";
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove("show"); }, 2500);
+  }
+
+  function showWake(on) {
+    wakeBtn.setAttribute("aria-pressed", String(on));
+    document.body.classList.toggle("awake", on);
+  }
+
+  function requestWake() {
+    return navigator.wakeLock.request("screen").then(function (lock) {
+      wakeLock = lock;
+      showWake(true);
+      // The browser drops the lock when the tab is hidden or the battery is low.
+      lock.addEventListener("release", function () {
+        wakeLock = null;
+        if (!wakeWanted || document.visibilityState === "visible") { wakeWanted = false; showWake(false); }
+      });
+    }).catch(function () { wakeWanted = false; showWake(false); });
+  }
+
+  if ("wakeLock" in navigator) {
+    wakeBtn.hidden = false;
+    wakeBtn.addEventListener("click", function () {
+      if (wakeWanted) {
+        wakeWanted = false;
+        if (wakeLock) wakeLock.release();
+        showWake(false);
+        say("La pantalla se apagará como siempre", "Screen will sleep as usual");
+      } else {
+        wakeWanted = true;
+        requestWake().then(function () {
+          if (wakeLock) say("La pantalla se queda encendida", "Screen stays on");
+          else say("Este navegador no lo permite", "This browser doesn't allow it");
+        });
+      }
+    });
+    // Coming back to the page (after switching apps or locking the phone): switch it on again.
+    document.addEventListener("visibilitychange", function () {
+      if (wakeWanted && !wakeLock && document.visibilityState === "visible") requestWake();
+    });
+  }
+
   setLang(state.lang);
   updateAll();
 })();

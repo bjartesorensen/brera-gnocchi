@@ -11,6 +11,9 @@ web page: Spanish on the left, English on the right. You can change the quantiti
 - **Adjustable quantities**: every recipe has its own servings stepper. The one in the
   top bar sets every recipe at once. Scaled amounts are highlighted, and `↺ original`
   brings the recipe back to the book's quantities.
+- **Keep screen on (☀)**: stops the phone screen from turning off while you cook. It uses
+  the browser's Screen Wake Lock (iPhone Safari 16.4+, Chrome/Android) and needs HTTPS. The
+  button only appears where the browser supports it.
 - Contents menu, light/dark mode, print styles. The page remembers your language and
   servings in the browser.
 

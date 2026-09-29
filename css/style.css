@@ -99,6 +99,15 @@ body[data-lang="both"] .toc-btn .en::before { content: " / "; }
   border: 1px solid var(--rule); background: var(--paper); border-radius: 999px;
   padding: .3rem .85rem; cursor: pointer; font-size: 14px;
 }
+.wake-btn {
+  border: 1px solid var(--rule); background: var(--paper); border-radius: 999px;
+  padding: .3rem .8rem; cursor: pointer; font-size: 14px; white-space: nowrap;
+}
+.wake-btn[hidden] { display: none; }
+.wake-btn .wake-icon { margin-right: .3rem; }
+.wake-btn .en { color: inherit !important; }
+body[data-lang="both"] .wake-btn .en::before { content: " / "; }
+.wake-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 .toc-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
 
 /* ---------- contents ---------- */
@@ -215,6 +224,17 @@ body[data-lang="both"] .section-sub .en { color: var(--en); }
 
 .foot { text-align: center; color: var(--ink-soft); font-size: 14px; padding: 2rem 1rem 3rem; border-top: 1px solid var(--rule); }
 
+.toast {
+  position: fixed; left: 50%; bottom: 1.5rem; z-index: 30;
+  transform: translate(-50%, 1rem); opacity: 0; pointer-events: none;
+  background: var(--ink); color: var(--paper); border-radius: 999px;
+  padding: .5rem 1.1rem; font-size: 15px; box-shadow: var(--shadow);
+  transition: opacity .2s, transform .2s; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast .en { color: inherit !important; }
+body[data-lang="both"] .toast .en::before { content: " · "; }
+
 /* ---------- small screens: stack the two languages ---------- */
 @media (max-width: 760px) {
   body { font-size: 16px; }
@@ -226,6 +246,9 @@ body[data-lang="both"] .section-sub .en { color: var(--en); }
   .global .stepper-label { display: none; }
   .global::before { content: "🍽"; margin-right: .1rem; }
   .toc-btn { padding: .3rem .7rem; }
+  .wake-btn { padding: .3rem .65rem; }
+  .wake-btn .wake-icon { margin: 0; }
+  .wake-btn .wake-label { display: none; }
   .toc-btn span { display: none !important; }
   .toc-btn::before { content: "☰"; }
   .toc { top: 5.9rem; }
@@ -242,7 +265,7 @@ body[data-lang="both"] .section-sub .en { color: var(--en); }
 
 /* ---------- print ---------- */
 @media print {
-  .bar, .toc, .reset, .stepper button { display: none !important; }
+  .bar, .toc, .toast, .reset, .stepper button { display: none !important; }
   body { background: #fff; font-size: 11pt; }
   .recipe { break-before: page; }
   .photo img { max-height: 9cm; box-shadow: none; }
